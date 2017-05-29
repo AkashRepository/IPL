@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+
+  <link rel="stylesheet" type="text/css" href="angular-material.css">
+
+  <link rel="stylesheet" type="text/css" href="https://material.angularjs.org/1.1.3/docs.css">
+  <style>
+    .graybox {
+      background-color:#ddd;
+    }
+  </style>
+
+
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+
+
+
+</head>
+<title>Indian Premier League</title>
+<body ng-app="myApp"> <!--ng-controller="onLoadCtrl"  data-ng-init="init()" -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">Indian Premier League</span>
+    </div>
+  </header>
+  
+  <main class="mdl-layout__content" style="background-color:whitesmoke">
+    <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--12-col ">
+
+        <div ng-controller="autoCompleteController" id="ctrlId"  class="autocompletedemoBasicUsage" layout="column" ng-cloak>
+        <!--   <md-content class="md-padding">
+            <form ng-submit="$event.preventDefault()">
+              <md-autocomplete
+                      ng-disabled="ctrl.isDisabled"
+                      md-no-cache="ctrl.noCache"
+                      md-selected-item="ctrl.selectedItem"
+                      md-search-text-change=""
+                      md-search-text="ctrl.searchText"
+                      md-selected-item-change=""
+                      md-items="item in ctrl.querySearch(ctrl.searchText)"
+                      md-item-text="item.display"
+                      md-min-length="0"
+                      placeholder="Please enter a project name..." >
+                <md-item-template>
+                  <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+                </md-item-template>
+                <bind-property name="md-selected-item" ng-model="ctrl.searchText" [ng-required]></bind-property>
+              </md-autocomplete>
+            </form>
+          </md-content> -->
+
+
+          <div ng-repeat="match in matches| orderBy:'match.id' : true " class="mdl-grid" style="float:left;width:100%">
+            <div class="mdl-cell mdl-cell--12-col mdl-cell--4-col-phone graybox">
+
+              <div class="wide-card mdl-card mdl-shadow--2dp" style="width:100%">
+
+
+                <div class="mdl-card__title">
+                  <h2 class="mdl-card__title-text">{{match.team1}} VS. {{match.team2}}</h2>
+                </div>
+
+
+                <div class="mdl-card__supporting-text"><b>Season :</b> {{match.season}}  &nbsp;   <b>Venue :</b> {{match.city}} &nbsp;   <b>Date :</b> {{match.date}}</div>
+                <div class="mdl-card__supporting-text"></div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <md-card-actions layout="row" layout-align="end center">
+                  <div class="mdl-card__supporting-text"><b>Player of the Match :</b> {{match.player_of_match}} &nbsp; 
+                  <font style="color: green"><b>Match Winner :</b> {{match.winner}}</font>
+                  </div>
+                   
+                      <md-button id={{match.id}} ng-click="getMatchDetails(match.id,$event)" class="md-primary md-raised" >Scoreboard</md-button>
+                  </md-card-actions>
+                  
+                </div>
+                <!-- <div class="mdl-card__menu"> -->
+                <!--  <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"><i class="material-icons"> --><!-- </i></button> -->
+                <!-- </div> -->
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script data-require="angular.js@1.4.x" src="https://code.angularjs.org/1.4.9/angular.js" data-semver="1.4.9"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-messages.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.9/angular-material.min.js"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.js"></script>
+
+
+<script src="http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js"></script>
+
+<script type="text/javascript" src="script.js"></script>
+<script type="text/ng-template" id="dialog1tmpl.html">
+  <md-dialog aria-label="ScoreBoard">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>ScoreBoard</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <md-content >
+        <md-tabs md-dynamic-height md-border-bottom>
+          <md-tab label="Inning 1">
+            <md-content class="md-padding">
+          <h3 class="mdl-card__title-text">Batting :<b>{{batting1}}</b> &nbsp; &nbsp; Bowling : <b>{{bowling1}}</b></h3>
+           <md-list>
+      <md-list-item class="md-3-line" ng-repeat="detail in details1">
+        <div class="md-list-item-text">
+          <h3><font style="color:red;">Over : {{detail._id.over}}</font> &nbsp;&nbsp;Bowler : {{detail._id.bowler}} &nbsp;&nbsp;Runs : {{detail.batruns}}&nbsp;&nbsp; Extras : {{detail.extras}} &nbsp;&nbsp;<b>Total Runs : </b>{{detail.totalRuns}}</h3>
+          <md-divider ng-if="!$last"></md-divider>
+        </div>
+      </md-list-item>
+    </md-list>
+        </md-content>
+      </md-tab>
+      <md-tab label="Inning 2">
+        <md-content class="md-padding">
+          <h3 class="mdl-card__title-text">Batting :<b>{{batting2}}</b> &nbsp; &nbsp; Bowling : <b>{{bowling2}}</b></h3>
+           <md-list>
+      <md-list-item class="md-3-line" ng-repeat="detail in details2">
+        <div class="md-list-item-text">
+          <h3><font style="color:red;">Over : {{detail._id.over}}</font> &nbsp;&nbsp;Bowler : {{detail._id.bowler}} &nbsp;&nbsp;Runs : {{detail.batruns}} &nbsp;&nbsp;Extras : {{detail.extras}} &nbsp;&nbsp;<b>Total Runs : </b>{{detail.totalRuns}}</h3>
+          <md-divider ng-if="!$last"></md-divider>
+        </div>
+      </md-list-item>
+    </md-list>
+        </md-content>
+      </md-tab>
+      </md-tabs>
+   
+  </md-content>
+      </div>
+       
+     
+    </md-dialog-content>
+
+   <!--  <md-dialog-actions layout="row">
+      <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>
+        More on Wikipedia
+      </md-button>
+      <span flex></span>
+      <md-button ng-click="answer('not useful')">
+       Not Useful
+      </md-button>
+      <md-button ng-click="answer('useful')">
+        Useful
+      </md-button>
+    </md-dialog-actions> -->
+  </form>
+</md-dialog>
+
+</script>
+</body>
+</html>
